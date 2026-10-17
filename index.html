@@ -1,54 +1,82 @@
 
-import turtle
-import math
-import random
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Love ❤️</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #120016;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+  canvas {
+    width: min(90vw, 500px);
+    height: min(90vw, 500px);
+  }
+  h1 {
+    color: #ff4d88;
+    text-shadow: 0 0 15px #ff0055;
+    text-align: center;
+  }
+  p { color: #ffd6e5; }
+</style>
+</head>
+<body>
 
-screen = turtle.Screen()
-screen.bgcolor("black")
-screen.title("Colorful Heart with Stars")
+<canvas id="heart" width="500" height="500"></canvas>
+<h1>❤️ I LOVE YOU ❤️</h1>
+<p>You make my world beautiful.</p>
 
-t = turtle.Turtle()
-t.speed(0)
-t.hideturtle()
-t.pensize(1)
+<script>
+const canvas = document.getElementById("heart");
+const ctx = canvas.getContext("2d");
+let progress = 0;
 
-# Faster animation while keeping the drawing visible
-screen.tracer(1, 0)
+function draw() {
+  ctx.clearRect(0, 0, 500, 500);
 
-colors = [
-    "red", "blue", "lime", "yellow", "cyan",
-    "magenta", "orange", "pink"
-]
+  // Draw the heart shape
+  ctx.beginPath();
+  for (let i = 0; i <= progress; i++) {
+    const t = i / 500 * Math.PI * 2;
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y = 13 * Math.cos(t) - 5 * Math.cos(2*t)
+              - 2 * Math.cos(3*t) - Math.cos(4*t);
+    const px = 250 + x * 12;
+    const py = 245 - y * 12;
 
-for i in range(120):
-    t.penup()
-    t.goto(0, 0)
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
 
-    angle = i * (math.pi * 2) / 120
+  ctx.strokeStyle = "#ff176b";
+  ctx.lineWidth = 3;
+  ctx.shadowColor = "#ff0055";
+  ctx.shadowBlur = 18;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
 
-    x = 16 * (math.sin(angle) ** 3) * 12
-    y = (
-        13 * math.cos(angle)
-        - 5 * math.cos(2 * angle)
-        - 2 * math.cos(3 * angle)
-        - math.cos(4 * angle)
-    ) * 12
+  if (progress < 500) {
+    progress += 3;
+    requestAnimationFrame(draw);
+  } else {
+    // Make the completed heart glow
+    ctx.fillStyle = "rgba(255, 23, 107, 0.12)";
+    ctx.fill();
+  }
+}
 
-    t.color(random.choice(colors))
-    t.pendown()
-    t.goto(x, y)
+draw();
+</script>
 
-    # Colorful stars, like the original
-    t.penup()
-    t.goto(x, y)
-    t.setheading(0)
-    t.pendown()
-
-    for _ in range(8):
-        t.forward(6)
-        t.backward(6)
-        t.right(45)
-
-screen.update()
-turtle.done()
-
+</body>
+</html>
